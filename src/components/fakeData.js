@@ -2,6 +2,7 @@ const fakeTaskObj = {
 "items":
     [
 {
+    "id": 1,
 "title": "ddd",
 "description": "jssk",
 "deadline": "2022-04-15",
@@ -15,6 +16,7 @@ const fakeTaskObj = {
 }
 },
 {
+    "id": 2,
 "title": "hhh",
 "description": "kkkkk",
 "deadline": null,
@@ -28,6 +30,7 @@ const fakeTaskObj = {
 }
 },
 {
+    "id": 3,
 "title": "MY NEW TASK",
 "description": "Reslly long dexcription to how to do task etc",
 "deadline": "2022-04-23",
@@ -41,6 +44,7 @@ const fakeTaskObj = {
 }
 },
 {
+    "id": 4,
 "title": "MY 2 updated TASK up",
 "description": "Reslly long dexcription to how to do task etc updated",
 "deadline": null,

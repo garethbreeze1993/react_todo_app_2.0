@@ -8,7 +8,6 @@ export default function Home() {
 
     React.useEffect(() => {
         taskObj.forEach((task) => {
-            console.log('ll')
             if(task.completed){
                 setCompletedTasks(prevCompletedTasks => prevCompletedTasks + 1)
             }
@@ -16,7 +15,7 @@ export default function Home() {
         return () => setCompletedTasks(0) // Using React Strict Mode renders component twice so after component unmounts set back to zero to avoid bug of doubling number of completed tasks
     }, [taskObj])
     const tasks = taskObj.map((task) => {
-        return <div>
+        return <div key={task.id}>
             <h2>{task.title}</h2>
             <p>{task.description}</p>
             <p>{task.deadline && task.deadline}</p>
