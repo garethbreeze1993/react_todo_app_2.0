@@ -1,4 +1,6 @@
 import { fakeTaskObj } from './fakeData';
+import { Link } from "react-router-dom";
+
 
 import React from "react"
 
@@ -16,7 +18,13 @@ export default function Home() {
     }, [taskObj])
     const tasks = taskObj.map((task) => {
         return <div key={task.id}>
+            <Link
+            style={{ display: "block", margin: "1rem 0" }}
+            to={`/tasks/${task.id}`}
+            key={task.id}
+          >
             <h2>{task.title}</h2>
+                </Link>
             <p>{task.description}</p>
             <p>{task.deadline && task.deadline}</p>
             <p>{task.completed ? "Completed" : "Not Completed"}</p>
