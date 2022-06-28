@@ -1,4 +1,4 @@
-import Nav from "./Navbar"
+import NavComponent from "./Navbar"
 import HTTP404 from "./HTTP404";
 import { fakeTaskObj } from './fakeData';
 import { useParams } from "react-router-dom";
@@ -19,7 +19,7 @@ function TaskDetail() {
 
     return (
         <main>
-            <Nav />
+            <NavComponent />
             {task ?
                 <div><h2>{task.title}</h2>
                 <p>{task.description}</p>
