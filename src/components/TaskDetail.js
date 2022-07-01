@@ -3,6 +3,9 @@ import HTTP404 from "./HTTP404";
 import { fakeTaskObj } from './fakeData';
 import { useParams } from "react-router-dom";
 import React from "react";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import CardGroup from "react-bootstrap/CardGroup";
 
 function TaskDetail() {
     let params = useParams();
@@ -15,17 +18,27 @@ function TaskDetail() {
 
     let task = getTask(parseInt(params.taskID, 10)) || false;
 
-    console.log(task)
-
     return (
         <main>
             <NavComponent />
             {task ?
-                <div><h2>{task.title}</h2>
-                <p>{task.description}</p>
-                <p>{task.deadline && task.deadline}</p>
-                <p>{task.completed ? "Completed" : "Not Completed"}</p>
-                <h2>Task user =  {task.owner.email}</h2></div>
+                <>
+                <CardGroup key={task.id}>
+            <Card>
+                  <Card.Body>
+                    <Card.Title>{task.title}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">{task.deadline && task.deadline}</Card.Subtitle>
+                    <Card.Text>
+                        {task.description}
+                    </Card.Text>
+                      <Card.Text>
+                      {task.completed ? "Completed" : "Not Completed"}
+                    </Card.Text>
+                  </Card.Body>
+            </Card>
+                </CardGroup>
+                <Button variant="danger">Delete</Button> <Button variant="success">Complete Task</Button>
+                </>
                 : <HTTP404 />}
         </main>
    );

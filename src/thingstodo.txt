@@ -1,4 +1,5 @@
 2. How to provide pagination on the home page in case of many records back from API ----     we do this server side do when join both front and back end together
 3. How to style each component so doesnt look crap (REACT-BOOTSTRAP) in progress
+4. Make a create component and form etc.
 
 
