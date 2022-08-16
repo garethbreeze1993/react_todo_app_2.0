@@ -13,7 +13,7 @@ function NavComponent() {
     <Nav className="me-auto">
       <Nav.Link href="/">Home</Nav.Link>
       <Nav.Link href="/about">About</Nav.Link>
-      <Nav.Link href="#">Create</Nav.Link>
+      <Nav.Link href="/create">Create</Nav.Link>
     </Nav>
       <Navbar.Collapse className="justify-content-end">
       <Navbar.Text>

@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './index.css';
 import App from './App';
 import About from "./components/About";
+import Create from "./components/Create";
 import HTTP404 from "./components/HTTP404";
 import TaskDetail from "./components/TaskDetail";
 
@@ -16,6 +17,7 @@ root.render(
           <Routes>
               <Route path="/" element={<App />} />
               <Route path="/about" element={<About />} />
+              <Route path="/create" element={<Create />} />
               <Route path="tasks/:taskID" element={<TaskDetail />} />
               <Route path="*" element={<HTTP404 />} />
             </Routes>
