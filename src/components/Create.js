@@ -6,8 +6,11 @@ import Container from "react-bootstrap/Container";
 import Form from 'react-bootstrap/Form';
 
 function Create() {
+    const axios = require('axios').default;
     const [formValues, setFormValues] = React.useState({formTitle: '', formDescription: '', formDeadline: ''})
     const [formSubmitted, setFormsubmitted] = React.useState(false);
+    const [formError, setFormError] = React.useState(false);
+    const [formErrorMsg, setFormErrorMsg] = React.useState('');
 
 
     function handleChange(event){
@@ -15,14 +18,39 @@ function Create() {
         setFormValues(prevState => {
             return {...prevState,
                     [name]: value}})
-        setFormsubmitted(false)
+        if(formSubmitted){
+            setFormsubmitted(false)
+        }
+        if(formError){
+            setFormError(false)
+        }
     }
 
     function handleSubmit(event, valueObj){
         event.preventDefault();
-        console.log(valueObj)
-        setFormValues({formTitle: '', formDescription: '', formDeadline: ''})
-        setFormsubmitted(true)
+
+        if (valueObj.formTitle === '' || valueObj.formDescription === ''){
+            setFormError(true);
+            setFormErrorMsg("Missing value(s) when submitting form please fill out both the title and description fields")
+            return
+        }
+        let dataObject = {title: valueObj.formTitle, description: valueObj.formDescription}
+        if(valueObj.formDeadline !== ''){
+            dataObject['deadline'] = valueObj.formDeadline
+        }
+
+        axios.post('http://127.0.0.1:8000/tasks', dataObject)
+            .then(function (response) {
+                setFormValues({formTitle: '', formDescription: '', formDeadline: ''})
+                setFormsubmitted(true)
+                console.log(response);
+                })
+            .catch(function (error) {
+                setFormError(true)
+                setFormErrorMsg("Error when submitting form. Please try again later.")
+                console.log(error);
+            });
+
     }
 
     return (
@@ -30,6 +58,7 @@ function Create() {
           <Nav />
           <Container>
               {formSubmitted && <Alert variant={"success"}>Form successfully submitted!</Alert>}
+              {formError && <Alert variant={"danger"}>{formErrorMsg}</Alert>}
               <Form onSubmit={(event) => {handleSubmit(event, formValues)}}>
                   <Form.Group className="mb-3" controlId="formTitle">
                       <Form.Label>Title</Form.Label>

@@ -6,6 +6,8 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
+import Container from "react-bootstrap/Container";
+
 
 function TaskDetail() {
     let params = useParams();
@@ -21,25 +23,27 @@ function TaskDetail() {
     return (
         <main>
             <NavComponent />
-            {task ?
-                <>
-                <CardGroup key={task.id}>
-            <Card>
-                  <Card.Body>
-                    <Card.Title>{task.title}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">{task.deadline && task.deadline}</Card.Subtitle>
-                    <Card.Text>
-                        {task.description}
-                    </Card.Text>
-                      <Card.Text>
-                      {task.completed ? "Completed" : "Not Completed"}
-                    </Card.Text>
-                  </Card.Body>
-            </Card>
-                </CardGroup>
-                <Button variant="danger">Delete</Button> <Button variant="success">Complete Task</Button>
-                </>
-                : <HTTP404 />}
+            <Container>
+                {task ?
+                    <>
+                    <CardGroup key={task.id}>
+                <Card>
+                      <Card.Body>
+                        <Card.Title>{task.title}</Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted">{task.deadline && task.deadline}</Card.Subtitle>
+                        <Card.Text>
+                            {task.description}
+                        </Card.Text>
+                          <Card.Text>
+                          {task.completed ? "Completed" : "Not Completed"}
+                        </Card.Text>
+                      </Card.Body>
+                </Card>
+                    </CardGroup>
+                    <Button variant="danger">Delete</Button> {!task.completed && <Button variant="success">Complete Task</Button>}
+                    </>
+                    : <HTTP404 />}
+            </Container>
         </main>
    );
 }
