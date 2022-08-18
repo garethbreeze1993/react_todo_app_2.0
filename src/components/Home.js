@@ -1,5 +1,3 @@
-import { fakeTaskObj } from './fakeData';
-import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card"
 import Pagination from "react-bootstrap/Pagination";
@@ -7,18 +5,30 @@ import React from "react"
 import CardGroup from "react-bootstrap/CardGroup";
 
 export default function Home() {
-    const [taskObj, setTaskObj] = React.useState(fakeTaskObj.items);
+    const axios = require('axios').default;
+    const [taskObj, setTaskObj] = React.useState([]);
     const [completedTasks, setCompletedTasks] = React.useState(0)
+    const [totalEntries, setTotalEntries] = React.useState(0)
+    const size = 25;
 
     // url = {{URL}}tasks?page=1&size=25
     // Get total and size from API request to determine how many pages needed
     // Hardcode for now to implement frontend
 
-    const total = 4;
-    const size = 2;
+    React.useEffect(() => {
+        axios.get('http://127.0.0.1:8000/tasks?page=1&size=25')
+            .then(function (response) {
+                setTaskObj(response.data.items)
+                setTotalEntries(response.data.total)
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }, [axios])
 
-    function calculateNoOfPages(total, size){
-       let pages = total / size
+    function calculateNoOfPages(totalEntries, size){
+       let pages = totalEntries / size
        if(pages < 1){
            return 1
        }
@@ -29,9 +39,7 @@ export default function Home() {
        }
     }
 
-    const numberOfPages = calculateNoOfPages(total, size)
-
-
+    const numberOfPages = calculateNoOfPages(totalEntries, size)
 
     React.useEffect(() => {
         taskObj.forEach((task) => {
@@ -69,14 +77,19 @@ export default function Home() {
             </Card>
                 </CardGroup>
     })
+
+    const returnContent = totalEntries > 0 ?
+        <Container>
+            <h1>Tasks</h1>
+            {tasks}
+            <p>You have {totalEntries} tasks in total of which {completedTasks} are completed</p>
+            <Pagination>{items}</Pagination>
+            </Container>
+        :
+        <Container><h4>No Tasks created yet</h4></Container>
     return (
         <section>
-            <Container>
-                <h1>Tasks</h1>
-                {tasks}
-                <p>You have {fakeTaskObj.total} tasks in total of which {completedTasks} are completed</p>
-                <Pagination>{items}</Pagination>
-            </Container>
+            {returnContent}
         </section>
     )
 }
