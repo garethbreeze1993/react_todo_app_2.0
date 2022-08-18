@@ -7,8 +7,10 @@ import CardGroup from "react-bootstrap/CardGroup";
 export default function Home() {
     const axios = require('axios').default;
     const [taskObj, setTaskObj] = React.useState([]);
+    const [allTaskObj, setAllTaskObj] = React.useState([]);
     const [completedTasks, setCompletedTasks] = React.useState(0)
     const [totalEntries, setTotalEntries] = React.useState(0)
+    const [page, setPage] = React.useState(1);
     const size = 25;
 
     // url = {{URL}}tasks?page=1&size=25
@@ -16,7 +18,7 @@ export default function Home() {
     // Hardcode for now to implement frontend
 
     React.useEffect(() => {
-        axios.get('http://127.0.0.1:8000/tasks?page=1&size=25')
+        axios.get(`http://127.0.0.1:8000/tasks?page=${page}&size=${size}`)
             .then(function (response) {
                 setTaskObj(response.data.items)
                 setTotalEntries(response.data.total)
@@ -25,7 +27,7 @@ export default function Home() {
             .catch(function (error) {
                 console.log(error)
             })
-    }, [axios])
+    }, [axios, page])
 
     function calculateNoOfPages(totalEntries, size){
        let pages = totalEntries / size
@@ -42,19 +44,27 @@ export default function Home() {
     const numberOfPages = calculateNoOfPages(totalEntries, size)
 
     React.useEffect(() => {
-        taskObj.forEach((task) => {
+        axios.get(`http://127.0.0.1:8000/tasks`)
+            .then(function (response) {
+                setAllTaskObj(response.data.items)
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+
+        allTaskObj.forEach((task) => {
             if(task.completed){
                 setCompletedTasks(prevCompletedTasks => prevCompletedTasks + 1)
             }
         })
         return () => setCompletedTasks(0) // Using React Strict Mode renders component twice so after component unmounts set back to zero to avoid bug of doubling number of completed tasks
-    }, [taskObj])
+    }, [allTaskObj, axios])
 
-    let active = 1;
     let items = [];
     for (let number = 1; number <= numberOfPages; number++) {
       items.push(
-        <Pagination.Item key={number} active={number === active}>
+        <Pagination.Item key={number} active={number === page} onClick={() => setPage(number)}>
           {number}
         </Pagination.Item>,
       );
