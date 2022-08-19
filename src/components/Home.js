@@ -8,7 +8,6 @@ export default function Home() {
     const axios = require('axios').default;
     const [taskObj, setTaskObj] = React.useState([]);
     const [allTaskObj, setAllTaskObj] = React.useState([]);
-    const [completedTasks, setCompletedTasks] = React.useState(0)
     const [totalEntries, setTotalEntries] = React.useState(0)
     const [page, setPage] = React.useState(1);
     const size = 25;
@@ -45,21 +44,14 @@ export default function Home() {
 
     React.useEffect(() => {
         axios.get(`http://127.0.0.1:8000/tasks`)
-            .then(function (response) {
+            .then(function (response){
+                console.log(response);
                 setAllTaskObj(response.data.items)
-                console.log(response)
             })
-            .catch(function (error) {
-                console.log(error)
-            })
-
-        allTaskObj.forEach((task) => {
-            if(task.completed){
-                setCompletedTasks(prevCompletedTasks => prevCompletedTasks + 1)
-            }
+            .catch((error) => {
+                console.error(error);
         })
-        return () => setCompletedTasks(0) // Using React Strict Mode renders component twice so after component unmounts set back to zero to avoid bug of doubling number of completed tasks
-    }, [allTaskObj, axios])
+    }, [axios])
 
     let items = [];
     for (let number = 1; number <= numberOfPages; number++) {
@@ -92,7 +84,7 @@ export default function Home() {
         <Container>
             <h1>Tasks</h1>
             {tasks}
-            <p>You have {totalEntries} tasks in total of which {completedTasks} are completed</p>
+            <p>You have {totalEntries} tasks in total of which {allTaskObj.filter((task_) => task_.completed === true).length} are completed</p>
             <Pagination>{items}</Pagination>
             </Container>
         :

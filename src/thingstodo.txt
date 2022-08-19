@@ -2,7 +2,7 @@
 3. How to style each component so doesnt look crap (REACT-BOOTSTRAP) in progress
 4. create all task connect to api Done
 5. get all tasks connect to api Done
-6. get one task connect to api
+6. get one task connect to api Done
 7. delete task connect to api
 8. complete task connect to api
 

@@ -1,6 +1,5 @@
 import NavComponent from "./Navbar"
 import HTTP404 from "./HTTP404";
-import { fakeTaskObj } from './fakeData';
 import { useParams } from "react-router-dom";
 import React from "react";
 import Button from "react-bootstrap/Button";
@@ -10,21 +9,30 @@ import Container from "react-bootstrap/Container";
 
 
 function TaskDetail() {
+    const axios = require('axios').default;
     let params = useParams();
+    const [task, setTask] = React.useState({});
+    const [error, setError] = React.useState(false);
 
-    function getTask(id_) {
-      return fakeTaskObj.items.find(
-        (task) => task.id === id_
-      );
-    }
+    let taskId = parseInt(params.taskID, 10) || false;
 
-    let task = getTask(parseInt(params.taskID, 10)) || false;
+    React.useEffect(() => {
+        axios.get(`http://127.0.0.1:8000/tasks/${taskId}`)
+            .then(function (response) {
+                setTask(response.data)
+                console.log(response)
+            })
+            .catch(function (error) {
+                if(error.response.status === 404){
+                    setTask(false);
+                }else {
+                    setError(true)
+                }
+                console.log(error)
+            })
+    }, [axios, taskId])
 
-    return (
-        <main>
-            <NavComponent />
-            <Container>
-                {task ?
+    const taskFound = task ?
                     <>
                     <CardGroup key={task.id}>
                 <Card>
@@ -42,7 +50,14 @@ function TaskDetail() {
                     </CardGroup>
                     <Button variant="danger">Delete</Button> {!task.completed && <Button variant="success">Complete Task</Button>}
                     </>
-                    : <HTTP404 />}
+                    : <HTTP404 />
+
+    return (
+        <main>
+            <NavComponent />
+            <Container>
+                {!error && taskFound}
+                {error && <h4>Error when connecting to server please try again later!</h4>}
             </Container>
         </main>
    );
