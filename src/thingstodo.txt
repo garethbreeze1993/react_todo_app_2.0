@@ -3,6 +3,6 @@
 4. create all task connect to api Done
 5. get all tasks connect to api Done
 6. get one task connect to api Done
-7. delete task connect to api
-8. complete task connect to api
+7. delete task connect to api Done
+8. complete task connect to api Done
 

@@ -2,7 +2,9 @@ import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card"
 import Pagination from "react-bootstrap/Pagination";
 import React from "react"
+import { useLocation } from "react-router-dom"
 import CardGroup from "react-bootstrap/CardGroup";
+import Alert from "react-bootstrap/Alert";
 
 export default function Home() {
     const axios = require('axios').default;
@@ -11,6 +13,8 @@ export default function Home() {
     const [totalEntries, setTotalEntries] = React.useState(0)
     const [page, setPage] = React.useState(1);
     const size = 25;
+    const locState  = useLocation();
+    const deletePage = locState.state ? locState.state.deleteObj : false;
 
     // url = {{URL}}tasks?page=1&size=25
     // Get total and size from API request to determine how many pages needed
@@ -81,17 +85,20 @@ export default function Home() {
     })
 
     const returnContent = totalEntries > 0 ?
-        <Container>
-            <h1>Tasks</h1>
+        <div>
+        <h1>Tasks</h1>
             {tasks}
             <p>You have {totalEntries} tasks in total of which {allTaskObj.filter((task_) => task_.completed === true).length} are completed</p>
             <Pagination>{items}</Pagination>
-            </Container>
+            </div>
         :
-        <Container><h4>No Tasks created yet</h4></Container>
+        <h4>No Tasks created yet</h4>
     return (
         <section>
-            {returnContent}
+            <Container>
+                {deletePage && <Alert variant={"success"}>{"Task successfully deleted!"}</Alert>}
+                {returnContent}
+            </Container>
         </section>
     )
 }
