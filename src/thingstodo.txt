@@ -5,4 +5,6 @@
 6. get one task connect to api Done
 7. delete task connect to api Done
 8. complete task connect to api Done
+9. Log in/log out functionality
+10. Sign up functionality
 

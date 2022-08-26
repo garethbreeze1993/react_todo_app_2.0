@@ -6,7 +6,9 @@ import App from './App';
 import About from "./components/About";
 import Create from "./components/Create";
 import HTTP404 from "./components/HTTP404";
+import Login from "./components/Login";
 import TaskDetail from "./components/TaskDetail";
+import SignUp from "./components/SignUp";
 
 import reportWebVitals from './reportWebVitals';
 
@@ -19,6 +21,8 @@ root.render(
               <Route path="/about" element={<About />} />
               <Route path="/create" element={<Create />} />
               <Route path="tasks/:taskID" element={<TaskDetail />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
               <Route path="*" element={<HTTP404 />} />
             </Routes>
       </BrowserRouter>

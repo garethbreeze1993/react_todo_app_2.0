@@ -16,6 +16,8 @@ function NavComponent() {
       <Nav.Link href="/create">Create</Nav.Link>
     </Nav>
       <Navbar.Collapse className="justify-content-end">
+        <Nav.Link href="/login">Log in</Nav.Link>
+        <Nav.Link href="/signup">Sign Up</Nav.Link>
       <Navbar.Text>
         Signed in as: <a href="#login">gareth.breeze@hypaship.com</a>
       </Navbar.Text>
