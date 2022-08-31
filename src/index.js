@@ -7,6 +7,7 @@ import About from "./components/About";
 import Create from "./components/Create";
 import HTTP404 from "./components/HTTP404";
 import Login from "./components/Login";
+import LogOut from "./components/LogOut";
 import TaskDetail from "./components/TaskDetail";
 import SignUp from "./components/SignUp";
 
@@ -23,6 +24,7 @@ root.render(
               <Route path="tasks/:taskID" element={<TaskDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/logout" element={<LogOut />} />
               <Route path="*" element={<HTTP404 />} />
             </Routes>
       </BrowserRouter>
