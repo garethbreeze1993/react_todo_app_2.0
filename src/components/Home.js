@@ -16,8 +16,10 @@ export default function Home() {
     const locState  = useLocation();
     const deletePage = locState.state ? locState.state.deleteObj : false;
     const userToken = localStorage.getItem('userToken');
-    const config = {headers: { Authorization: `Bearer ${userToken}` }};
     const [loginTxt, setLoginTxt] = React.useState(false);
+    const config = React.useMemo(() => {
+        return {headers: { Authorization: `Bearer ${userToken}` }}
+    }, [userToken])
 
     // url = {{URL}}tasks?page=1&size=25
     // Get total and size from API request to determine how many pages needed

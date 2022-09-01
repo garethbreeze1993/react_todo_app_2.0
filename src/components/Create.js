@@ -12,9 +12,9 @@ function Create() {
     const [formError, setFormError] = React.useState(false);
     const [formErrorMsg, setFormErrorMsg] = React.useState('');
     const userToken = localStorage.getItem('userToken');
-    const config = React.useMemo(() => {
-        return {headers: { Authorization: `Bearer ${userToken}` }}
-    }, [userToken])
+    const config = {
+    headers: { Authorization: `Bearer ${userToken}` }
+};
 
 
     function handleChange(event){
