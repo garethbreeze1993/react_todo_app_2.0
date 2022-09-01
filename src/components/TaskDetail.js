@@ -10,7 +10,7 @@ import CardGroup from "react-bootstrap/CardGroup";
 import Container from "react-bootstrap/Container";
 
 
-function TaskDetail() {
+function TaskDetail(factory, deps) {
     const axios = require('axios').default;
     let params = useParams();
     let navigate = useNavigate();
@@ -19,27 +19,31 @@ function TaskDetail() {
     const [banner, setBanner] = React.useState(false);
     const [bannerMsg, setBannerMsg] = React.useState(false);
     const [bannerLvl, setBannerLvl] = React.useState('');
+    const userToken = localStorage.getItem('userToken');
+    const config = React.useMemo(() => {
+        return {headers: { Authorization: `Bearer ${userToken}` }}
+    }, [userToken])
 
     let taskId = parseInt(params.taskID, 10) || false;
 
     React.useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/tasks/${taskId}`)
+        axios.get(`http://127.0.0.1:8000/tasks/${taskId}`, config)
             .then(function (response) {
                 setTask(response.data)
                 console.log(response)
             })
             .catch(function (error) {
-                if(error.response.status === 404){
+                if(error.response.status === 404 || error.response.status === 401){
                     setTask(false);
                 }else {
                     setError(true)
                 }
                 console.log(error)
             })
-    }, [axios, taskId])
+    }, [axios, taskId, config])
 
     function handleComplete () {
-        axios.put(`http://127.0.0.1:8000/tasks/complete/${taskId}`, {"completed": true})
+        axios.put(`http://127.0.0.1:8000/tasks/complete/${taskId}`, {"completed": true}, config)
             .then(function (response) {
                 setTask(response.data);
                 setBanner(true);
@@ -55,7 +59,7 @@ function TaskDetail() {
     }
 
     function handleDelete () {
-        axios.delete(`http://127.0.0.1:8000/tasks/${taskId}`)
+        axios.delete(`http://127.0.0.1:8000/tasks/${taskId}`, config)
             .then(function (response) {
                 navigate("/", { state: { deleteObj: true } });
             })

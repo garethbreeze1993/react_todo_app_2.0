@@ -11,6 +11,10 @@ function Create() {
     const [formSubmitted, setFormsubmitted] = React.useState(false);
     const [formError, setFormError] = React.useState(false);
     const [formErrorMsg, setFormErrorMsg] = React.useState('');
+    const userToken = localStorage.getItem('userToken');
+    const config = React.useMemo(() => {
+        return {headers: { Authorization: `Bearer ${userToken}` }}
+    }, [userToken])
 
 
     function handleChange(event){
@@ -39,7 +43,7 @@ function Create() {
             dataObject['deadline'] = valueObj.formDeadline
         }
 
-        axios.post('http://127.0.0.1:8000/tasks', dataObject)
+        axios.post('http://127.0.0.1:8000/tasks', dataObject, config)
             .then(function (response) {
                 setFormValues({formTitle: '', formDescription: '', formDeadline: ''})
                 setFormsubmitted(true)
@@ -47,7 +51,12 @@ function Create() {
                 })
             .catch(function (error) {
                 setFormError(true)
-                setFormErrorMsg("Error when submitting form. Please try again later.")
+                if (error.response.data.detail === 'Could not validate credentials'){
+                    setFormErrorMsg("You need to be logged in to create a post.")
+                }
+                else{
+                    setFormErrorMsg("Error when submitting form. Please try again later.")
+                }
                 console.log(error);
             });
 

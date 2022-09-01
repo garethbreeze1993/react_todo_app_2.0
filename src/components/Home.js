@@ -15,22 +15,28 @@ export default function Home() {
     const size = 25;
     const locState  = useLocation();
     const deletePage = locState.state ? locState.state.deleteObj : false;
+    const userToken = localStorage.getItem('userToken');
+    const config = {headers: { Authorization: `Bearer ${userToken}` }};
+    const [loginTxt, setLoginTxt] = React.useState(false);
 
     // url = {{URL}}tasks?page=1&size=25
     // Get total and size from API request to determine how many pages needed
     // Hardcode for now to implement frontend
 
     React.useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/tasks?page=${page}&size=${size}`)
+        axios.get(`http://127.0.0.1:8000/tasks?page=${page}&size=${size}`, config)
             .then(function (response) {
                 setTaskObj(response.data.items)
                 setTotalEntries(response.data.total)
                 console.log(response)
             })
             .catch(function (error) {
+                if (error.response.data.detail === 'Could not validate credentials'){
+                    setLoginTxt(true);
+                }
                 console.log(error)
             })
-    }, [axios, page])
+    }, [axios, page, config])
 
     function calculateNoOfPages(totalEntries, size){
        let pages = totalEntries / size
@@ -47,7 +53,7 @@ export default function Home() {
     const numberOfPages = calculateNoOfPages(totalEntries, size)
 
     React.useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/tasks`)
+        axios.get(`http://127.0.0.1:8000/tasks`, config)
             .then(function (response){
                 console.log(response);
                 setAllTaskObj(response.data.items)
@@ -55,7 +61,7 @@ export default function Home() {
             .catch((error) => {
                 console.error(error);
         })
-    }, [axios])
+    }, [axios, config])
 
     let items = [];
     for (let number = 1; number <= numberOfPages; number++) {
@@ -92,7 +98,10 @@ export default function Home() {
             <Pagination>{items}</Pagination>
             </div>
         :
+        <>
         <h4>No Tasks created yet</h4>
+        {loginTxt && <h5>Please Login to view tasks</h5>}
+            </>
     return (
         <section>
             <Container>
