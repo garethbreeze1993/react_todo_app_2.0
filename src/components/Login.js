@@ -23,7 +23,9 @@ function Login() {
         axios.post('http://127.0.0.1:8000/login', bodyFormData)
             .then(function (response) {
                 setFormValues({formEmail: '', formPassword1: ''})
+                console.log(response.data)
                 localStorage.setItem('userToken', response.data.access_token)
+                localStorage.setItem('userRefreshToken', response.data.refresh_token)
                 navigate("/");
                 // console.log(response.data.access_token);
                 })

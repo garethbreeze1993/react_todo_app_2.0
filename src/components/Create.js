@@ -4,6 +4,7 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Container from "react-bootstrap/Container";
 import Form from 'react-bootstrap/Form';
+import base_api from "../base_api";
 
 function Create() {
     const axios = require('axios').default;
@@ -43,7 +44,7 @@ function Create() {
             dataObject['deadline'] = valueObj.formDeadline
         }
 
-        axios.post('http://127.0.0.1:8000/tasks', dataObject, config)
+        base_api.post('http://127.0.0.1:8000/tasks', dataObject)
             .then(function (response) {
                 setFormValues({formTitle: '', formDescription: '', formDeadline: ''})
                 setFormsubmitted(true)
