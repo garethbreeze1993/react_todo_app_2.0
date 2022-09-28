@@ -25,14 +25,13 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
   return response;
 };
 
-const onResponseError = async (error: AxiosError): Promise<AxiosError> => {
+const onResponseError = async (error: AxiosError): Promise<AxiosResponse<any>> => {
   if (error.response) {
     // Access Token was expired
     if (
       error.response.status === 401 &&
       error.response.data.detail === "Expired Access Token"
     ) {
-
       const refreshToken = localStorage.getItem("userRefreshToken");
       console.log(refreshToken)
 
@@ -45,7 +44,7 @@ const onResponseError = async (error: AxiosError): Promise<AxiosError> => {
 
         localStorage.setItem("userToken", access_token);
 
-        return;
+        return rs;
       } catch (_error) {
         return Promise.reject(_error);
       }
