@@ -3,7 +3,8 @@ import Nav from "./Navbar"
 
 
 function LogOut() {
-    localStorage.removeItem('userToken')
+    localStorage.removeItem('userToken');
+    localStorage.removeItem("userRefreshToken");
   return (
     <main>
         <Nav />

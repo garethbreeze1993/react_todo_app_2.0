@@ -7,16 +7,10 @@ import Form from 'react-bootstrap/Form';
 import base_api from "../base_api";
 
 function Create() {
-    const axios = require('axios').default;
     const [formValues, setFormValues] = React.useState({formTitle: '', formDescription: '', formDeadline: ''})
     const [formSubmitted, setFormsubmitted] = React.useState(false);
     const [formError, setFormError] = React.useState(false);
     const [formErrorMsg, setFormErrorMsg] = React.useState('');
-    const userToken = localStorage.getItem('userToken');
-    const config = {
-    headers: { Authorization: `Bearer ${userToken}` }
-};
-
 
     function handleChange(event){
         const {name, value} = event.target
@@ -46,28 +40,9 @@ function Create() {
 
         base_api.post('http://127.0.0.1:8000/tasks', dataObject)
             .then(function (response) {
-                if(response.data.hasOwnProperty('access_token')){
-                    // If access token expired refresh token is used to get new access token so refire same request
-                    base_api.post('http://127.0.0.1:8000/tasks', dataObject)
-                        .then(function (res) {
-                            setFormValues({formTitle: '', formDescription: '', formDeadline: ''})
-                            setFormsubmitted(true)})
-                        .catch(function (err){
-                             setFormError(true)
-                              if (err.response.data.detail === 'Could not validate credentials'){
-                                    setFormErrorMsg("You need to be logged in to create a post.")
-                              }
-                              else{
-                                  setFormErrorMsg("Error when submitting form. Please try again later.")
-                                }
-                                console.log(err);
-                        })
-                }
-                else{
-                    setFormValues({formTitle: '', formDescription: '', formDeadline: ''})
-                    setFormsubmitted(true)
-                    console.log(response);}
-
+                setFormValues({formTitle: '', formDescription: '', formDeadline: ''})
+                setFormsubmitted(true)
+                console.log(response);
                 })
             .catch(function (error) {
                 setFormError(true)

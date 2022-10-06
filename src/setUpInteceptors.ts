@@ -5,14 +5,41 @@ import axios, {
   AxiosResponse,
 } from "axios";
 
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
+
 const API_URL = 'http://127.0.0.1:8000'
 const storedToken = localStorage.getItem("userToken");
+
+// Function that will be called to refresh authorization
+const refreshAuthLogic = async (failedRequest) => {
+    const refreshToken = localStorage.getItem("userRefreshToken");
+
+      try {
+        const rs = await axios.post(`${API_URL}/refresh`, {
+          refresh_token:  refreshToken,
+        });
+
+        const { access_token } = rs.data;
+
+        localStorage.setItem("userToken", access_token);
+        failedRequest.response.config.headers['Authorization'] = 'Bearer ' + access_token;
+        return Promise.resolve();
+
+}
+  finally {
+
+      }
+}
+
+function getAccessToken() {
+    return localStorage.getItem('userToken');
+}
 
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
   const token = localStorage.getItem("userToken");
   console.log(token)
-  config.headers["Authorization"] = `Bearer ${token}`;
+  config.headers["Authorization"] = `Bearer ${getAccessToken()}`;
 
   return config;
 };
@@ -26,36 +53,13 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 };
 
 const onResponseError = async (error: AxiosError): Promise<AxiosResponse<any>> => {
-  if (error.response) {
-    // Access Token was expired
-    if (
-      error.response.status === 401 &&
-      error.response.data.detail === "Expired Access Token"
-    ) {
-      const refreshToken = localStorage.getItem("userRefreshToken");
-      console.log(refreshToken)
-
-      try {
-        const rs = await axios.post(`${API_URL}/refresh`, {
-          refresh_token:  refreshToken,
-        });
-
-        const { access_token } = rs.data;
-
-        localStorage.setItem("userToken", access_token);
-
-        return rs;
-      } catch (_error) {
-        return Promise.reject(_error);
-      }
-    }
-  }
   return Promise.reject(error);
 };
 
 export const setupInterceptorsTo = (
   axiosInstance: AxiosInstance
 ): AxiosInstance => {
+  createAuthRefreshInterceptor(axiosInstance, refreshAuthLogic);
   axiosInstance.interceptors.request.use(onRequest, onRequestError);
   axiosInstance.interceptors.response.use(onResponse, onResponseError);
   return axiosInstance;

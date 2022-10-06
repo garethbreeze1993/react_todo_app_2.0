@@ -8,10 +8,11 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 import Container from "react-bootstrap/Container";
+import base_api from "../base_api";
+
 
 
 function TaskDetail(factory, deps) {
-    const axios = require('axios').default;
     let params = useParams();
     let navigate = useNavigate();
     const [task, setTask] = React.useState({});
@@ -19,15 +20,11 @@ function TaskDetail(factory, deps) {
     const [banner, setBanner] = React.useState(false);
     const [bannerMsg, setBannerMsg] = React.useState(false);
     const [bannerLvl, setBannerLvl] = React.useState('');
-    const userToken = localStorage.getItem('userToken');
-    const config = React.useMemo(() => {
-        return {headers: { Authorization: `Bearer ${userToken}` }}
-    }, [userToken])
 
     let taskId = parseInt(params.taskID, 10) || false;
 
     React.useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/tasks/${taskId}`, config)
+        base_api.get(`http://127.0.0.1:8000/tasks/${taskId}`)
             .then(function (response) {
                 setTask(response.data)
                 console.log(response)
@@ -40,10 +37,10 @@ function TaskDetail(factory, deps) {
                 }
                 console.log(error)
             })
-    }, [axios, taskId, config])
+    }, [taskId])
 
     function handleComplete () {
-        axios.put(`http://127.0.0.1:8000/tasks/complete/${taskId}`, {"completed": true}, config)
+        base_api.put(`http://127.0.0.1:8000/tasks/complete/${taskId}`, {"completed": true})
             .then(function (response) {
                 setTask(response.data);
                 setBanner(true);
@@ -59,7 +56,7 @@ function TaskDetail(factory, deps) {
     }
 
     function handleDelete () {
-        axios.delete(`http://127.0.0.1:8000/tasks/${taskId}`, config)
+        base_api.delete(`http://127.0.0.1:8000/tasks/${taskId}`)
             .then(function (response) {
                 navigate("/", { state: { deleteObj: true } });
             })

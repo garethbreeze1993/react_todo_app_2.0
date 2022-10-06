@@ -4,19 +4,18 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import base_api from "../base_api";
+
 
 function NavComponent() {
-  const axios = require('axios').default;
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
   const userToken = localStorage.getItem('userToken');
-  const config = {
-    headers: { Authorization: `Bearer ${userToken}` }
-};
+
 
   React.useEffect(() => {
     if(userToken){
-    axios.get(`http://localhost:8000/users/get_user_data`, config)
+    base_api.get(`http://localhost:8000/users/get_user_data`)
         .then((response) => {
             setLoggedIn(true)
             console.log(response)
@@ -26,7 +25,7 @@ function NavComponent() {
           setLoggedIn(false)
         })
     }
-  }, [axios])
+  }, [])
 
   return (
     <>
