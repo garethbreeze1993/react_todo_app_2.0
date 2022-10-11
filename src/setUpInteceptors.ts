@@ -7,8 +7,7 @@ import axios, {
 
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-const API_URL = 'http://127.0.0.1:8000'
-const storedToken = localStorage.getItem("userToken");
+const API_URL = `${process.env.REACT_APP_API_URL}`
 
 // Function that will be called to refresh authorization
 const refreshAuthLogic = async (failedRequest) => {

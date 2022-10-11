@@ -24,7 +24,7 @@ function TaskDetail(factory, deps) {
     let taskId = parseInt(params.taskID, 10) || false;
 
     React.useEffect(() => {
-        base_api.get(`http://127.0.0.1:8000/tasks/${taskId}`)
+        base_api.get(`${process.env.REACT_APP_API_URL}/tasks/${taskId}`)
             .then(function (response) {
                 setTask(response.data)
                 console.log(response)
@@ -40,7 +40,7 @@ function TaskDetail(factory, deps) {
     }, [taskId])
 
     function handleComplete () {
-        base_api.put(`http://127.0.0.1:8000/tasks/complete/${taskId}`, {"completed": true})
+        base_api.put(`${process.env.REACT_APP_API_URL}/tasks/complete/${taskId}`, {"completed": true})
             .then(function (response) {
                 setTask(response.data);
                 setBanner(true);
@@ -56,7 +56,7 @@ function TaskDetail(factory, deps) {
     }
 
     function handleDelete () {
-        base_api.delete(`http://127.0.0.1:8000/tasks/${taskId}`)
+        base_api.delete(`${process.env.REACT_APP_API_URL}/tasks/${taskId}`)
             .then(function (response) {
                 navigate("/", { state: { deleteObj: true } });
             })
