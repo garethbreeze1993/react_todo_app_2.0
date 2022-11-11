@@ -20,7 +20,7 @@ function Login() {
         const bodyFormData = new FormData();
         bodyFormData.append('username', formValues.formEmail)
         bodyFormData.append('password', formValues.formPassword1)
-        axios.post(`${process.env.REACT_APP_API_URL}/login`, bodyFormData)
+        axios.post(`/login`, bodyFormData)
             .then(function (response) {
                 setFormValues({formEmail: '', formPassword1: ''})
                 console.log(response.data)

@@ -38,7 +38,7 @@ function Create() {
             dataObject['deadline'] = valueObj.formDeadline
         }
 
-        base_api.post(`${process.env.REACT_APP_API_URL}/tasks`, dataObject)
+        base_api.post(`/tasks/`, dataObject)
             .then(function (response) {
                 setFormValues({formTitle: '', formDescription: '', formDeadline: ''})
                 setFormsubmitted(true)

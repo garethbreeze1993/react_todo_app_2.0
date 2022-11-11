@@ -21,7 +21,7 @@ function SignUp() {
         }
         let dataObject = {email: formValues.formEmail, password: formValues.formPassword1}
 
-        axios.post(`${process.env.REACT_APP_API_URL}/users`, dataObject)
+        axios.post(`/users/`, dataObject)
             .then(function (response) {
                 setFormValues({formEmail: '', formPassword1: '', formPassword2: ''})
                 setFormsubmitted(true)

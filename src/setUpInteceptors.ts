@@ -7,14 +7,12 @@ import axios, {
 
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-const API_URL = `${process.env.REACT_APP_API_URL}`
-
 // Function that will be called to refresh authorization
 const refreshAuthLogic = async (failedRequest) => {
     const refreshToken = localStorage.getItem("userRefreshToken");
 
       try {
-        const rs = await axios.post(`${API_URL}/refresh`, {
+        const rs = await axios.post(`/refresh`, {
           refresh_token:  refreshToken,
         });
 
